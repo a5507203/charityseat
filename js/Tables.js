@@ -1,29 +1,37 @@
 
 import * as Commands from './commands/Commands.js';
 
+
+
+
+// var Chair = 
+
 function Tables( editor ) {
 
 	this.signals = editor.signals;
 	this.editor = editor;
-	this.groups = 1
+	this.number_table = 1;
+	this.table3DList = {};
+	this.totalSeat = "";
 
 };
 
 Tables.prototype = {
 
-	deleteTable: function ( cmd, optionalName ) {
+	deleteTableSets: function ( tableId ) {
 
 	
 
 	},
+	
+	addTableSets: function ( chairs ) {
 
-	addTableSets: function ( cmd, optionalName ) {
-
-		var s = chairs.getValue();
+		// TODO need to calculate coordinates 
 		var y = -50+s*12;
 		for (let i = 0; i < tables.getValue(); i++) {
 			var x = -30 + i*12;
-			var table = createTableSet( x, y, s );
+			var table = createTableSetObject( x, y, chairs );
+			this.table3DList[table.uuid] = table;
 			editor.execute( new AddObjectCommand( editor, table ) );
 		}
 
@@ -61,7 +69,9 @@ Tables.prototype = {
 		
 		return table_mesh;
 
-	}
+	},
+
+
 
 };
 

@@ -84,10 +84,11 @@ function Strings( config ) {
 			
 			'sidebar/tables/size': 'Chairs Set of',
 			'sidebar/tables/number': 'Number of Tables',
+			'sidebar/event/id': "Event ID",
 			'sidebar/tables/add': 'Create New Table Sets',
 			'sidebar/tables/edit': 'Edit',
 			'sidebar/tables/confirm': 'Add',
-
+			'sidebar/seat/guest':"Guest",
 
 
 			'sidebar/animations': 'Animations',

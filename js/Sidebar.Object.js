@@ -21,51 +21,6 @@ function SidebarObject( editor ) {
 	container.setPaddingTop( '20px' );
 	container.setDisplay( 'none' );
 
-	// Actions
-
-	/*
-	var objectActions = new UI.Select().setPosition( 'absolute' ).setRight( '8px' ).setFontSize( '11px' );
-	objectActions.setOptions( {
-
-		'Actions': 'Actions',
-		'Reset Position': 'Reset Position',
-		'Reset Rotation': 'Reset Rotation',
-		'Reset Scale': 'Reset Scale'
-
-	} );
-	objectActions.onClick( function ( event ) {
-
-		event.stopPropagation(); // Avoid panel collapsing
-
-	} );
-	objectActions.onChange( function ( event ) {
-
-		var object = editor.selected;
-
-		switch ( this.getValue() ) {
-
-			case 'Reset Position':
-				editor.execute( new SetPositionCommand( editor, object, new Vector3( 0, 0, 0 ) ) );
-				break;
-
-			case 'Reset Rotation':
-				editor.execute( new SetRotationCommand( editor, object, new Euler( 0, 0, 0 ) ) );
-				break;
-
-			case 'Reset Scale':
-				editor.execute( new SetScaleCommand( editor, object, new Vector3( 1, 1, 1 ) ) );
-				break;
-
-		}
-
-		this.setValue( 'Actions' );
-
-	} );
-	container.addStatic( objectActions );
-	*/
-
-	// type
-
 	var objectTypeRow = new UIRow();
 	var objectType = new UIText();
 
@@ -74,17 +29,6 @@ function SidebarObject( editor ) {
 
 	container.add( objectTypeRow );
 
-	// uuid
-
-	var objectUUIDRow = new UIRow();
-	var objectUUID = new UIInput().setWidth( '102px' ).setFontSize( '12px' ).setDisabled( true );
-	var objectUUIDRenew = new UIButton( strings.getKey( 'sidebar/object/new' ) ).setMarginLeft( '7px' ).onClick( function () {
-
-		objectUUID.setValue( THREE.MathUtils.generateUUID() );
-
-		editor.execute( new SetUuidCommand( editor, editor.selected, objectUUID.getValue() ) );
-
-	} );
 
 	objectUUIDRow.add( new UIText( strings.getKey( 'sidebar/object/uuid' ) ).setWidth( '90px' ) );
 	objectUUIDRow.add( objectUUID );
@@ -282,20 +226,6 @@ function SidebarObject( editor ) {
 
 	container.add( objectDecayRow );
 
-	// shadow
-
-	var objectShadowRow = new UIRow();
-
-	objectShadowRow.add( new UIText( strings.getKey( 'sidebar/object/shadow' ) ).setWidth( '90px' ) );
-
-	var objectCastShadow = new UIBoolean( false, strings.getKey( 'sidebar/object/cast' ) ).onChange( update );
-	objectShadowRow.add( objectCastShadow );
-
-	var objectReceiveShadow = new UIBoolean( false, strings.getKey( 'sidebar/object/receive' ) ).onChange( update );
-	objectShadowRow.add( objectReceiveShadow );
-
-	container.add( objectShadowRow );
-
 	// shadow bias
 
 	var objectShadowBiasRow = new UIRow();
@@ -329,35 +259,8 @@ function SidebarObject( editor ) {
 
 	container.add( objectShadowRadiusRow );
 
-	// visible
 
-	var objectVisibleRow = new UIRow();
-	var objectVisible = new UICheckbox().onChange( update );
 
-	objectVisibleRow.add( new UIText( strings.getKey( 'sidebar/object/visible' ) ).setWidth( '90px' ) );
-	objectVisibleRow.add( objectVisible );
-
-	container.add( objectVisibleRow );
-
-	// frustumCulled
-
-	var objectFrustumCulledRow = new UIRow();
-	var objectFrustumCulled = new UICheckbox().onChange( update );
-
-	objectFrustumCulledRow.add( new UIText( strings.getKey( 'sidebar/object/frustumcull' ) ).setWidth( '90px' ) );
-	objectFrustumCulledRow.add( objectFrustumCulled );
-
-	container.add( objectFrustumCulledRow );
-
-	// renderOrder
-
-	var objectRenderOrderRow = new UIRow();
-	var objectRenderOrder = new UIInteger().setWidth( '50px' ).onChange( update );
-
-	objectRenderOrderRow.add( new UIText( strings.getKey( 'sidebar/object/renderorder' ) ).setWidth( '90px' ) );
-	objectRenderOrderRow.add( objectRenderOrder );
-
-	container.add( objectRenderOrderRow );
 
 	// user data
 
@@ -515,23 +418,7 @@ function SidebarObject( editor ) {
 
 			}
 
-			if ( object.visible !== objectVisible.getValue() ) {
 
-				editor.execute( new SetValueCommand( editor, object, 'visible', objectVisible.getValue() ) );
-
-			}
-
-			if ( object.frustumCulled !== objectFrustumCulled.getValue() ) {
-
-				editor.execute( new SetValueCommand( editor, object, 'frustumCulled', objectFrustumCulled.getValue() ) );
-
-			}
-
-			if ( object.renderOrder !== objectRenderOrder.getValue() ) {
-
-				editor.execute( new SetValueCommand( editor, object, 'renderOrder', objectRenderOrder.getValue() ) );
-
-			}
 
 			if ( object.castShadow !== undefined && object.castShadow !== objectCastShadow.getValue() ) {
 
@@ -604,7 +491,6 @@ function SidebarObject( editor ) {
 			'angle': objectAngleRow,
 			'penumbra': objectPenumbraRow,
 			'decay': objectDecayRow,
-			'castShadow': objectShadowRow,
 			'receiveShadow': objectReceiveShadow,
 			'shadow': [ objectShadowBiasRow, objectShadowNormalBiasRow, objectShadowRadiusRow ]
 		};
@@ -820,7 +706,6 @@ function SidebarObject( editor ) {
 
 		}
 
-		objectVisible.setValue( object.visible );
 		objectFrustumCulled.setValue( object.frustumCulled );
 		objectRenderOrder.setValue( object.renderOrder );
 

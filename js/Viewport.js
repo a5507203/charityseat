@@ -64,14 +64,15 @@ function Viewport( editor ) {
 
 	//
 
-	// var box = new THREE.Box3();
+	var box = new THREE.Box3();
 
-	// var selectionBox = new THREE.BoxHelper();
-	// selectionBox.material.depthTest = false;
-	// selectionBox.material.transparent = true;
-	// selectionBox.visible = false;
+	var selectionBox = new THREE.BoxHelper();
+	selectionBox.material.depthTest = false;
+	selectionBox.material.color
+	selectionBox.material.transparent = true;
+	selectionBox.visible = false;
 
-	// sceneHelpers.add( selectionBox );
+	sceneHelpers.add( selectionBox );
 
 	var objectPositionOnDown = null;
 	var objectRotationOnDown = null;
@@ -181,7 +182,7 @@ function Viewport( editor ) {
 		raycaster.setFromCamera( mouse, camera );
 		console.log(objects);
 		return raycaster.intersectObjects( objects )
-			.filter( intersect => intersect.object.name == "T" );
+			.filter( intersect => intersect.object.name == "T" || intersect.object.name == "C"  );
 
 	}
 
@@ -412,21 +413,25 @@ function Viewport( editor ) {
 
 	signals.objectSelected.add( function ( object ) {
 
-		// selectionBox.visible = false;
+		selectionBox.visible = false;
 		transformControls.detach();
 
 		if ( object !== null && object !== scene && object !== camera ) {
 
-			// box.setFromObject( object );
+			if (object.name == "C" ){
+				box.setFromObject( object );
 
-			// if ( box.isEmpty() === false ) {
+				if ( box.isEmpty() === false ) {
 
-			// 	selectionBox.setFromObject( object );
-			// 	selectionBox.visible = true;
+					selectionBox.setFromObject( object );
+					selectionBox.visible = true;
 
-			// }
-
-			transformControls.attach( object );
+				}
+			}
+			else if (object.name == "T" ) {
+				console.log("s",object);
+				transformControls.attach( object );
+			}
 
 		}
 
@@ -465,11 +470,11 @@ function Viewport( editor ) {
 	// hardcode 
 	signals.objectAdded.add( function ( object ) {
 		objects.push( object );
-		// object.traverse( function ( child ) {
+		object.traverse( function ( child ) {
 
-		// 	objects.push( child );
+			objects.push( child );
 
-		// } );
+		} );
 
 	} );
 

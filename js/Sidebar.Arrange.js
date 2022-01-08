@@ -1,9 +1,10 @@
-import { UIPanel, UIText, UIRow, UINumber, UIButton } from './libs/ui.js';
+import { UIPanel, UIText, UIRow, UINumber, UIButton, UIInput } from './libs/ui.js';
 import { UIBoolean } from './libs/ui.three.js';
 import { AddObjectCommand } from './commands/AddObjectCommand.js';
 import { Tables } from './Tables.js';
 
 function SidebarTableAdd( editor ) {
+
 
 	var signals = editor.signals;
 	var strings = editor.strings;
@@ -13,6 +14,21 @@ function SidebarTableAdd( editor ) {
 	var headerRow = new UIRow();
 	headerRow.add( new UIText( strings.getKey( 'sidebar/tables/add' ).toUpperCase() ) );
 	container.add( headerRow );
+
+
+	
+	var eventRow = new UIRow();
+	var eventId = new UIInput().setWidth( '150px' ).setFontSize( '12px' ).setValue("").onChange( function () {
+
+		signals.eventIdChanged.dispatch();
+
+	} );
+
+	eventRow.add( new UIText( strings.getKey( 'sidebar/event/id' ) ).setWidth( '90px' ));
+	eventRow.add( eventId );
+
+	container.add( eventRow );
+
 
 
 	var tablesRow = new UIRow();
@@ -62,9 +78,9 @@ function SidebarTableAdd( editor ) {
 		var table_mesh = new THREE.Mesh( table_geometry, new THREE.MeshBasicMaterial( { color: 0xffffff } ) );
 
 		var line = new THREE.LineSegments( table_edges, new THREE.LineBasicMaterial( { color: 0x000000 } ) );
-		console.log(table_edges)
+
 		table_mesh.attach(line);
-		table_mesh.name = "T"
+		table_mesh.name = "T";
 		table_mesh.position.set( posX, posY, 0 );
 		// group.add(mesh);
 		for (let i = 0; i < chairs; i++) {
@@ -73,12 +89,13 @@ function SidebarTableAdd( editor ) {
 			const chair_x = (1+table_size) * Math.cos( segment );
 			const chair_y = (1+table_size) * Math.sin( segment );
 
-			var chair_geometry = new THREE.CircleGeometry(1, 32 );
+			var chair_geometry = new THREE.CircleGeometry(1.2, 32 );
 			var chair_edges = new THREE.EdgesGeometry( chair_geometry );
 			var chair_mesh = new THREE.Mesh( chair_geometry, new THREE.MeshBasicMaterial( { color: 0x83dcfc } ) );
+			chair_mesh.name = "C";
 			var chair_line = new THREE.LineSegments( chair_edges, new THREE.LineBasicMaterial( { color: 0x000000 } ) );
-			chair_mesh.attach(chair_line)
-			table_mesh.attach(chair_mesh)
+			chair_mesh.attach(chair_line);
+			table_mesh.attach(chair_mesh);
 			chair_mesh.position.set( chair_x, chair_y, 0 );
 		}
 		
