@@ -28,6 +28,7 @@ class SetSceneCommand extends Command {
 			while ( scene.children.length > 0 ) {
 
 				const child = scene.children.pop();
+				console.log("set sc");
 				this.cmdArray.push( new AddObjectCommand( this.editor, child ) );
 
 			}

@@ -8,7 +8,7 @@ import { Storage as _Storage } from './Storage.js';
 
 var _DEFAULT_CAMERA = new THREE.PerspectiveCamera( 50, 1, 0.01, 1000 );
 _DEFAULT_CAMERA.name = 'Camera';
-_DEFAULT_CAMERA.position.set( 0, 0, 80);
+_DEFAULT_CAMERA.position.set( 0, 0, 130);
 _DEFAULT_CAMERA.lookAt( new THREE.Vector3() );
 
 
@@ -64,6 +64,8 @@ function Editor() {
 		objectAdded: new Signal(),
 		objectChanged: new Signal(),
 		objectRemoved: new Signal(),
+
+		groupChanged: new Signal(),
 
 		cameraAdded: new Signal(),
 		cameraRemoved: new Signal(),
@@ -231,7 +233,9 @@ Editor.prototype = {
 			if ( child.material !== undefined ) scope.removeMaterial( child.material );
 
 		} );
-
+		console.log("remove");
+		console.log(object.parent);
+		console.log(object);
 		object.parent.remove( object );
 
 		this.signals.objectRemoved.dispatch( object );

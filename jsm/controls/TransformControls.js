@@ -863,7 +863,7 @@ class TransformControlsGizmo extends Object3D {
 			// 	[ new Mesh( new OctahedronGeometry( 0.1, 0 ), matWhiteTransparent.clone() ), [ 0, 0, 0 ]]
 			// ],
 			XY: [
-				[ new Mesh( new  CircleGeometry( 0.075, 1 ), matBlueTransparent.clone() ), [ 0, 0, 0 ]]
+				[ new Mesh( new  CircleGeometry( 0.05, 1 ), matBlueTransparent.clone() ), [ 0, 0, 0 ]]
 			]
 			// YZ: [
 			// 	[ new Mesh( new BoxGeometry( 0.15, 0.15, 0.01 ), matRedTransparent.clone() ), [ 0, 0.15, 0.15 ], [ 0, Math.PI / 2, 0 ]]
@@ -890,7 +890,7 @@ class TransformControlsGizmo extends Object3D {
 			// 	[ new Mesh( new OctahedronGeometry( 0.2, 0 ), matInvisible ) ]
 			// ],
 			XY: [
-				[ new Mesh( new BoxGeometry( 0.2, 0.2, 0.01 ), matInvisible ), [ 0, 0, 0 ]]
+				[ new Mesh( new BoxGeometry( 0.3, 0.3, 0.01 ), matInvisible ), [ 0, 0, 0 ]]
 			]
 			// YZ: [
 			// 	[ new Mesh( new BoxGeometry( 0.2, 0.2, 0.01 ), matInvisible ), [ 0, 0.15, 0.15 ], [ 0, Math.PI / 2, 0 ]]
@@ -900,26 +900,26 @@ class TransformControlsGizmo extends Object3D {
 			// ]
 		};
 
-		const helperTranslate = {
-			START: [
-				[ new Mesh( new OctahedronGeometry( 0.01, 2 ), matHelper ), null, null, null, 'helper' ]
-			],
-			END: [
-				[ new Mesh( new OctahedronGeometry( 0.01, 2 ), matHelper ), null, null, null, 'helper' ]
-			],
-			DELTA: [
-				[ new Line( TranslateHelperGeometry(), matHelper ), null, null, null, 'helper' ]
-			],
-			X: [
-				[ new Line( lineGeometry, matHelper.clone() ), [ - 1e3, 0, 0 ], null, [ 1e6, 1, 1 ], 'helper' ]
-			],
-			Y: [
-				[ new Line( lineGeometry, matHelper.clone() ), [ 0, - 1e3, 0 ], [ 0, 0, Math.PI / 2 ], [ 1e6, 1, 1 ], 'helper' ]
-			]
-			// Z: [
-			// 	[ new Line( lineGeometry, matHelper.clone() ), [ 0, 0, - 1e3 ], [ 0, - Math.PI / 2, 0 ], [ 1e6, 1, 1 ], 'helper' ]
-			// ]
-		};
+		// const helperTranslate = {
+		// 	START: [
+		// 		[ new Mesh( new OctahedronGeometry( 0.01, 2 ), matHelper ), null, null, null, 'helper' ]
+		// 	],
+		// 	END: [
+		// 		[ new Mesh( new OctahedronGeometry( 0.01, 2 ), matHelper ), null, null, null, 'helper' ]
+		// 	],
+		// 	DELTA: [
+		// 		[ new Line( TranslateHelperGeometry(), matHelper ), null, null, null, 'helper' ]
+		// 	],
+		// 	X: [
+		// 		[ new Line( lineGeometry, matHelper.clone() ), [ - 1e3, 0, 0 ], null, [ 1e6, 1, 1 ], 'helper' ]
+		// 	],
+		// 	Y: [
+		// 		[ new Line( lineGeometry, matHelper.clone() ), [ 0, - 1e3, 0 ], [ 0, 0, Math.PI / 2 ], [ 1e6, 1, 1 ], 'helper' ]
+		// 	]
+		// 	// Z: [
+		// 	// 	[ new Line( lineGeometry, matHelper.clone() ), [ 0, 0, - 1e3 ], [ 0, - Math.PI / 2, 0 ], [ 1e6, 1, 1 ], 'helper' ]
+		// 	// ]
+		// };
 
 		const gizmoRotate = {
 			XYZE: [
@@ -1103,9 +1103,9 @@ class TransformControlsGizmo extends Object3D {
 		this.add( this.picker[ 'translate' ] = setupGizmo( pickerTranslate ) );
 		this.add( this.picker[ 'rotate' ] = setupGizmo( pickerRotate ) );
 		this.add( this.picker[ 'scale' ] = setupGizmo( pickerScale ) );
-		this.add( this.helper[ 'translate' ] = setupGizmo( helperTranslate ) );
-		this.add( this.helper[ 'rotate' ] = setupGizmo( helperRotate ) );
-		this.add( this.helper[ 'scale' ] = setupGizmo( helperScale ) );
+		// this.add( this.helper[ 'translate' ] = setupGizmo( helperTranslate ) );
+		// this.add( this.helper[ 'rotate' ] = setupGizmo( helperRotate ) );
+		// this.add( this.helper[ 'scale' ] = setupGizmo( helperScale ) );
 
 		// Pickers should be hidden always
 
@@ -1129,15 +1129,15 @@ class TransformControlsGizmo extends Object3D {
 		this.gizmo[ 'rotate' ].visible = this.mode === 'rotate';
 		this.gizmo[ 'scale' ].visible = this.mode === 'scale';
 
-		this.helper[ 'translate' ].visible = this.mode === 'translate';
-		this.helper[ 'rotate' ].visible = this.mode === 'rotate';
-		this.helper[ 'scale' ].visible = this.mode === 'scale';
+		// this.helper[ 'translate' ].visible = this.mode === 'translate';
+		// this.helper[ 'rotate' ].visible = this.mode === 'rotate';
+		// this.helper[ 'scale' ].visible = this.mode === 'scale';
 
 
 		let handles = [];
 		handles = handles.concat( this.picker[ this.mode ].children );
 		handles = handles.concat( this.gizmo[ this.mode ].children );
-		handles = handles.concat( this.helper[ this.mode ].children );
+		// handles = handles.concat( this.helper[ this.mode ].children );
 
 		for ( let i = 0; i < handles.length; i ++ ) {
 

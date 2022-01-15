@@ -85,7 +85,7 @@ function Viewport( editor ) {
 
 		if ( object !== undefined ) {
 
-			// selectionBox.setFromObject( object );
+			selectionBox.setFromObject( object );
 
 			var helper = editor.helpers[ object.id ];
 
@@ -180,7 +180,7 @@ function Viewport( editor ) {
 		mouse.set( ( point.x * 2 ) - 1, - ( point.y * 2 ) + 1 );
 
 		raycaster.setFromCamera( mouse, camera );
-		console.log(objects);
+		// console.log(objects);
 		return raycaster.intersectObjects( objects )
 			.filter( intersect => intersect.object.name == "T" || intersect.object.name == "C"  );
 
@@ -214,7 +214,7 @@ function Viewport( editor ) {
 					editor.select( object.userData.object );
 
 				} else {
-					console.log(object)
+					// console.log(object)
 					editor.select( object );
 
 				}
@@ -418,7 +418,7 @@ function Viewport( editor ) {
 
 		if ( object !== null && object !== scene && object !== camera ) {
 
-			if (object.name == "C" ){
+			//if (object.name == "C" ){
 				box.setFromObject( object );
 
 				if ( box.isEmpty() === false ) {
@@ -427,8 +427,8 @@ function Viewport( editor ) {
 					selectionBox.visible = true;
 
 				}
-			}
-			else if (object.name == "T" ) {
+			//}
+			if (object.name == "T" ) {
 				console.log("s",object);
 				transformControls.attach( object );
 			}
@@ -469,7 +469,7 @@ function Viewport( editor ) {
 
 	// hardcode 
 	signals.objectAdded.add( function ( object ) {
-		objects.push( object );
+		// objects.push( object );
 		object.traverse( function ( child ) {
 
 			objects.push( child );
@@ -480,11 +480,11 @@ function Viewport( editor ) {
 
 	signals.objectChanged.add( function ( object ) {
 
-		// if ( editor.selected === object ) {
+		if ( editor.selected === object ) {
 
-		// 	selectionBox.setFromObject( object );
+			selectionBox.setFromObject( object );
 
-		// }
+		}
 
 		if ( object.isPerspectiveCamera ) {
 

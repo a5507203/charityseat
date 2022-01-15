@@ -1,31 +1,32 @@
 import * as THREE from '../build/three.module.js';
 
-import { UISpan, UIPanel, UIRow, UIInput, UISelect, UIButton, UIColor, UICheckbox, UIInteger, UITextArea, UIText, UINumber } from './libs/ui.js';
+import { UIPanel, UIRow, UIInput, UISelect, UIButton, UIColor, UICheckbox, UIInteger, UITextArea, UIText, UINumber } from './libs/ui.js';
 import { UIBoolean } from './libs/ui.three.js';
 
 import { SetUuidCommand } from './commands/SetUuidCommand.js';
 import { SetValueCommand } from './commands/SetValueCommand.js';
 import { SetPositionCommand } from './commands/SetPositionCommand.js';
 import { SetColorCommand } from './commands/SetColorCommand.js';
-import { SidebarTableAdd } from './Sidebar.Arrange.js';
-import {Guests} from "./Guests.js";
+import { SidebarTableGroups } from './Sidebar.Table.Groups.js';
 
 
-function SidebarEditTable( editor ) {
 
-	var guests = new Guests(editor);
+function SidebarEditTable( editor, tables, guests ) {
+
+	var guests = guests;
+	var tables = tables;
 	var strings = editor.strings;
 	var signals = editor.signals;
 
-	var container = new UISpan();
-	container.add( new SidebarTableAdd( editor ) );
+	// var container = new UISpan();
+	// container.add( new Arrange( editor ) );
 	
 
 	var objectContainer = new UIPanel();
 	objectContainer.setBorderTop( '0' );
 	objectContainer.setPaddingTop( '20px' );
 	objectContainer.setDisplay( 'none' );
-	container.add( objectContainer );
+	// container.add( objectContainer );
 	//
 
 	var objectTypeRow = new UIRow();
@@ -52,52 +53,78 @@ function SidebarEditTable( editor ) {
 	objectContainer.add( objectNameRow );
 
 
+
+
+	// group selection
+	var groupRow = new UIRow();
+	var groupOptions = {0:" "};
+	var groupSelection = new UISelect().setWidth( '150px' );
+	groupSelection.setOptions( groupOptions );
+	groupSelection.setValue( 0 );
+	groupRow.add( new UIText( strings.getKey( 'sidebar/seat/group' ) ).setWidth( '90px' ) );
+	groupRow.add( groupSelection );
+	objectContainer.add( groupRow );
+
+	//group details
+	objectContainer.add(new SidebarTableGroups(editor,guests));
+
+	// guest selection
+	var guestRow = new UIRow();	
+	var guestOptions = {0:" "};
+	var guestSelection = new UISelect().setWidth( '150px' );
+	guestSelection.setOptions( guestOptions );
+	guestSelection.setValue( 0 );
+
+
+
+	guestRow.add( new UIText( strings.getKey( 'sidebar/seat/guest' ) ).setWidth( '90px' ) );
+	guestRow.add( guestSelection );
+	objectContainer.add( guestRow );
+
+	var buttonRow = new UIRow();
+	var button = new UIButton( strings.getKey( 'sidebar/tables/confirm' ) ).onClick( function(){ 
+			// var value = this.getValue();\
+		tables.seatDown(groupSelection.getValue(), guestSelection.getValue());
+		signals.groupChanged.dispatch(groupSelection.getValue());
+
+	}).setWidth( '250px' );
+	buttonRow.add( button );
+	objectContainer.add( buttonRow );
+
 	
-	// // position
+	groupSelection.onChange( function () {
 
-	// var objectPositionRow = new UIRow();
-	// var objectPositionX = new UINumber().setPrecision( 3 ).setWidth( '50px' ).onChange( update );
-	// var objectPositionY = new UINumber().setPrecision( 3 ).setWidth( '50px' ).onChange( update );
+		var value = this.getValue();
+		// var object = editor.selected;
+		signals.groupChanged.dispatch(value);
+		// tables.addGuests();
+		guestOptions = guests.getGuestDictbyTeamId(value);
+		// console.log(guestOptions);
+		guestOptions[0] = "Empty";
+		guestSelection.setOptions( guestOptions );
 
 
-	// objectPositionRow.add( new UIText( strings.getKey( 'sidebar/object/position' ) ).setWidth( '90px' ) );
-	// objectPositionRow.add( objectPositionX, objectPositionY );
+	} );
+	
 
-	// objectContainer.add( objectPositionRow );
-
-
-	//
-
-	var options = {0:"empty"}
 	signals.eventIdChanged.add(function(){
-		options = guests.toDict();
-		console.log(options);
-		options[0] = "empty";
-		seat.setOptions( options );
-		console.log(options)
+
+		groupOptions = guests.groupDict();
+		groupOptions[0] = " ";
+		groupSelection.setOptions( groupOptions );
+
+
+		guestOptions = guests.getGuestDictbyTeamId(0);
+		// console.log(guestOptions);
+		guestOptions[0] = "Empty";
+		guestSelection.setOptions( guestOptions );
+
+		
 
 	})
 
-	var seatRow = new UIRow();
-	var seat = new UISelect().setWidth( '150px' );
-	seat.setOptions( options );
-	seat.setValue( 0 );
 
-	seat.onChange( function () {
 
-		// var value = this.getValue();
-		var object = editor.selected;
-		var value = this.getValue();
-		console.log(value);
-		
-		editor.execute( new SetValueCommand( editor, object, 'userData', guests.guestdict[value] ) );
-
-	} );
-
-	seatRow.add( new UIText( strings.getKey( 'sidebar/seat/guest' ) ).setWidth( '90px' ) );
-	seatRow.add( seat );
-
-	objectContainer.add( seatRow );
 
 
 	// user data
@@ -269,18 +296,19 @@ function SidebarEditTable( editor ) {
 
 		if (object.name == "T"){
 			objectUserData.setHeight( '400px' )
+			guestRow.setDisplay( 'none' );
 
 		}
 		else if (object.name == "C") {
 			objectUserData.setHeight( '200px' )
-
+			guestRow.setDisplay( 'inline' );
 		}
 
 		// updateTransformRows( object );
 
 	}
 
-	return container;
+	return objectContainer;
 
 }
 
