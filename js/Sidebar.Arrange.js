@@ -5,7 +5,7 @@ import { Tables } from './Tables.js';
 import { SidebarEditTable } from './Sidebar.Table.js';
 import {Guests} from "./Guests.js";
 import {GenerateEvent} from "./GenerateEvent.js";
-
+import { SidebarTableGroups } from './Sidebar.Table.Groups.js';
 
 function Arrange( editor ) {
 
@@ -58,6 +58,8 @@ function Arrange( editor ) {
 	eventRow.add( eventId );
 	newTableContainer.add( eventRow );
 
+	//group details
+	container.add(new SidebarTableGroups(editor,guests));
 
 	container.add( new SidebarEditTable( editor, tables, guests ) );
 

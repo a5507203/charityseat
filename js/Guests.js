@@ -24,7 +24,21 @@ Guest.prototype = {
 
     toString: function() {
         return this.teamId+" "+this.teamName+" "+this.firstName+" "+this.lastName;
-    }
+    },
+
+    toJSON: function(){
+
+        return{
+            "firstName": this.firstName,
+            "lastName": this.lastName,
+            "teamId": this.teamId,
+            "teamName": this.teamName,
+            "seatNumber": this.seatNumber ,
+            "tableNumber": this.tableNumber,
+            "ticketNumber": this.ticketNumber
+        };
+
+    },
     
 }
 
@@ -105,7 +119,7 @@ Guests.prototype = {
         var totalGuests = 0;
         for (const [k,guest] of Object.entries(this.guestdict)) {
             var teamId = guest.teamId;
-            if ( teamId != selectedId ) continue;
+            if ( selectedId!=0 && teamId != selectedId ) continue;
             if (guest.seat3d == null) unseatedGuests += 1;
             totalGuests += 1;
         }
@@ -122,6 +136,14 @@ Guests.prototype = {
             waitingGuestsList.push(guest);
           }
 		return waitingGuestsList;
+	},
+
+    
+	seatUp: function( ticketNumbers ) {
+
+        for (var ticketNumber of ticketNumbers) {
+            this.guestdict[ticketNumber].setSeat3d(null);
+          }	
 	},
 
     getGuestByTicketNumber: function (ticketNumber) {

@@ -88,14 +88,15 @@ function Strings( config ) {
 			'sidebar/tables/addtitle': 'Create New Table Sets',
 			'sidebar/tables/edit': 'Edit',
 			'sidebar/tables/add': 'Add',
-			'sidebar/tables/confirm': 'Add the Group to This Table',
-			'sidebar/guest/confirm': 'Add the Guest to This Table',
+			'sidebar/tables/confirm': 'Assign the Group to This Table',
+			'sidebar/guest/confirm': 'Assign the Guest to This Chair',
 			'sidebar/seat/guest':"Select A Guest",
 			'sidebar/seat/group':"Select A Group",
 
 			'sidebar/groups/unseated':"Unseated Guests",
 			'sidebar/groups/total':"Total Guests",
-			'sidebar/groups/details':"Group Details",
+			'sidebar/groups/details':"Arrange Status of the Selected Group",
+			'sidebar/event/details':"Arrange Status of This Event",
 
 			'sidebar/animations': 'Animations',
 			'sidebar/animations/play': 'Play',

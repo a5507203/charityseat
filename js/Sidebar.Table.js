@@ -29,10 +29,13 @@ function SidebarEditTable( editor, tables, guests ) {
 	// container.add( objectContainer );
 	//
 
+	
+
+
 	var objectTypeRow = new UIRow();
 	var objectType = new UIText();
 
-	objectTypeRow.add( new UIText( strings.getKey( 'sidebar/object/type' ) ).setWidth( '90px' ) );
+	objectTypeRow.add( new UIText( strings.getKey( 'sidebar/object/type' ) ).setWidth( '120px' ) );
 	objectTypeRow.add( objectType );
 
 	objectContainer.add( objectTypeRow );
@@ -41,13 +44,13 @@ function SidebarEditTable( editor, tables, guests ) {
 	// name
 
 	var objectNameRow = new UIRow();
-	var objectName = new UIInput().setWidth( '150px' ).setFontSize( '12px' ).onChange( function () {
+	var objectName = new UIInput().setWidth( '140px' ).setFontSize( '12px' ).onChange( function () {
 
 		editor.execute( new SetValueCommand( editor, editor.selected, 'name', objectName.getValue() ) );
 
 	} );
 
-	objectNameRow.add( new UIText( strings.getKey( 'sidebar/object/name' ) ).setWidth( '90px' ) );
+	objectNameRow.add( new UIText( strings.getKey( 'sidebar/object/name' ) ).setWidth( '120px' ) );
 	objectNameRow.add( objectName );
 
 	objectContainer.add( objectNameRow );
@@ -58,33 +61,28 @@ function SidebarEditTable( editor, tables, guests ) {
 	// group selection
 	var groupRow = new UIRow();
 	var groupOptions = {0:" "};
-	var groupSelection = new UISelect().setWidth( '150px' );
+	var groupSelection = new UISelect().setWidth( '140px' );
 	groupSelection.setOptions( groupOptions );
 	groupSelection.setValue( 0 );
-	groupRow.add( new UIText( strings.getKey( 'sidebar/seat/group' ) ).setWidth( '90px' ) );
+	groupRow.add( new UIText( strings.getKey( 'sidebar/seat/group' ) ).setWidth( '120px' ) );
 	groupRow.add( groupSelection );
 	objectContainer.add( groupRow );
 
-	//group details
-	objectContainer.add(new SidebarTableGroups(editor,guests));
 
 	// guest selection
 	var guestRow = new UIRow();	
 	var guestOptions = {0:" "};
-	var guestSelection = new UISelect().setWidth( '150px' );
+	var guestSelection = new UISelect().setWidth( '140px' );
 	guestSelection.setOptions( guestOptions );
 	guestSelection.setValue( 0 );
-
-
-
-	guestRow.add( new UIText( strings.getKey( 'sidebar/seat/guest' ) ).setWidth( '90px' ) );
+	guestRow.add( new UIText( strings.getKey( 'sidebar/seat/guest' ) ).setWidth( '120px' ) );
 	guestRow.add( guestSelection );
 	objectContainer.add( guestRow );
 
 	var buttonRow = new UIRow();
 	var button = new UIButton( strings.getKey( 'sidebar/tables/confirm' ) ).onClick( function(){ 
 			// var value = this.getValue();\
-		tables.seatDown(groupSelection.getValue(), guestSelection.getValue());
+		tables.arrangeSeat(groupSelection.getValue(), guestSelection.getValue());
 		signals.groupChanged.dispatch(groupSelection.getValue());
 
 	}).setWidth( '250px' );
@@ -106,6 +104,7 @@ function SidebarEditTable( editor, tables, guests ) {
 
 	} );
 	
+	// signals.object
 
 	signals.eventIdChanged.add(function(){
 
@@ -130,7 +129,7 @@ function SidebarEditTable( editor, tables, guests ) {
 	// user data
 
 	var objectUserDataRow = new UIRow();
-	var objectUserData = new UITextArea().setWidth( '150px' ).setHeight( '500px' ).setFontSize( '12px' ).onChange( update );
+	var objectUserData = new UITextArea().setWidth( '140px' ).setHeight( '500px' ).setFontSize( '12px' ).onChange( update );
 	objectUserData.onKeyUp( function () {
 
 		try {
@@ -149,7 +148,7 @@ function SidebarEditTable( editor, tables, guests ) {
 
 	} );
 
-	objectUserDataRow.add( new UIText( strings.getKey( 'sidebar/object/userdata' ) ).setWidth( '90px' ) );
+	objectUserDataRow.add( new UIText( strings.getKey( 'sidebar/object/userdata' ) ).setWidth( '120px' ) );
 	objectUserDataRow.add( objectUserData );
 
 	objectContainer.add( objectUserDataRow );
@@ -279,11 +278,16 @@ function SidebarEditTable( editor, tables, guests ) {
 
 		objectType.setValue( object.type );
 		objectName.setValue( object.name );
-
-
+		
+	
 		try {
-
-			objectUserData.setValue( JSON.stringify( object.userData, null, '  ' ) );
+			if (object.name == "T"){
+				objectUserData.setValue( JSON.stringify( object.userData, null, '  ' ) );
+	
+			}
+			else if (object.name == "C") {
+				objectUserData.setValue( JSON.stringify( object.userData, null, '  ' ) );
+			}
 
 		} catch ( error ) {
 
@@ -295,13 +299,15 @@ function SidebarEditTable( editor, tables, guests ) {
 		objectUserData.setBackgroundColor( '' );
 
 		if (object.name == "T"){
-			objectUserData.setHeight( '400px' )
+			objectUserData.setHeight( '300px' );
 			guestRow.setDisplay( 'none' );
+			button.setTextContent( strings.getKey("sidebar/tables/confirm"));
 
 		}
 		else if (object.name == "C") {
-			objectUserData.setHeight( '200px' )
-			guestRow.setDisplay( 'inline' );
+			objectUserData.setHeight( '200px' );
+			guestRow.setDisplay( 'inline-block' );
+			button.setTextContent(strings.getKey("sidebar/guest/confirm"));
 		}
 
 		// updateTransformRows( object );

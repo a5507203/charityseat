@@ -2,8 +2,32 @@
 import * as Commands from './commands/Commands.js';
 import { AddObjectCommand } from './commands/AddObjectCommand.js';
 import { SetValueCommand } from './commands/SetValueCommand.js';
+import { IfcCompositeProfileDef } from '../jsm/loaders/ifc/web-ifc-api.js';
 
 
+// class Chair extends Mesh {
+// 	constructor() {
+// 		var chair_geometry = new THREE.CircleGeometry(1, 32 );
+// 		super( chair_geometry,  new THREE.MeshBasicMaterial( { color: 0x83dcfc } ) );
+// 		this.name = "C";
+// 		var chair_edges = new THREE.EdgesGeometry( chair_geometry );
+// 		var chair_line = new THREE.LineSegments( chair_edges, new THREE.LineBasicMaterial( { color: 0x000000 } ) );
+// 		this.attach(chair_line);
+
+// 	}
+
+	// arrangeSeat() {
+	// 	#ed80a4
+
+	// }
+
+	// seatUp() {
+
+	// }
+
+
+
+// }
 
 function Tables( editor, guests ) {
 
@@ -12,26 +36,52 @@ function Tables( editor, guests ) {
 	this.editor = editor;
 	this.num_tables = 0;
 	this.table3DDict = {};
-	this.totalSeat = "";
+	this.totalSeat = 0;
 	this.tableNoList = [];
 	this.margin = 5;
 	this.distToTable = 1.4;
 	this.guests = guests;
 	// TODO add event listener to intialize table numbers and list
+	var scope = this;
+	this.signals.objectRemoved.add(function(table){
+		console.log(table);
+		scope.deleteTableSets( table, scope );
 
-
+	});
 
 }
 
 
 Tables.prototype = {
 
-	deleteTableSets: function ( tableId ) {
-		// this.num_tables += 1;
-		const index = this.tableNoList.indexOf(tableId);
-		if (index > -1) {
-			this.tableNoList.splice(index, 1);
+	deleteTableSets: function ( table, scope ) {
+
+		scope.totalSeat -= table.userData.meta.chairs;
+		var ticketNumbers = [];
+		console.log(table.children.length);
+		for (let i = 0 ; i< table.children.length; i+=1) { 
+			var child = table.children[i];
+			if (child.name != "C") continue;
+			child.material.color.set(0x83dcfc);
+			// console.log(child);
+			// console.log("ASDAS");
+			if (child.userData.guest ) ticketNumbers.push(child.userData.guest.ticketNumber);
+			
+			scope.editor.execute( new SetValueCommand( editor, child, 'userData', {} ) );
+	
+
 		}
+	
+		console.log(ticketNumbers);
+		scope.guests.seatUp(ticketNumbers);
+
+		
+		// this.num_tables += 1;
+		// TODO a lot of things to do with guests 
+		// const index = this.tableNoList.indexOf(tableId);
+		// if (index > -1) {
+		// 	this.tableNoList.splice(index, 1);
+		// }
 
 	},
 	
@@ -51,20 +101,19 @@ Tables.prototype = {
 			
 		}
 		// this.num_tables += 1;
-
+		this.totalSeat += num_tables*chairs;
+		
 		this.tableNoList.sort(function(a, b){return a-b});
 		
 
 	},
-
-	
 
 	calculateX: function ( chairs ) {
 		var scope = this;
 		var x = -70;
 		var i = 1;
 		Object.entries(scope.table3DDict).forEach(([k,table]) =>{
-			console.log(table);
+		
 			if (chairs == table.userData.meta.size) {
 				// console.log("")
 				var table_size = Math.max(3,parseInt(chairs/2));
@@ -109,22 +158,31 @@ Tables.prototype = {
 		if (chair == undefined) {
 			return false;
 		}
-		// chair.userData.ticketNumber = ticketNumber;
+		// assign a chair to a guest
 		guest.setSeat3d(chair);
-		this.editor.execute( new SetValueCommand( editor, chair, 'userData', {"ticketNumber":ticketNumber} ) );
+		// // assign a guest to a chair and change the chair status
+		chair.material.color.set(0xed80a4);
+		// console.log(guest.toJSON());
+		this.editor.execute( new SetValueCommand( editor, chair, 'userData', {"guest":guest.toJSON()} ) );
 
 		return true;
 	}, 
 
-	seatDown: function ( teamId, ticketNumber ) {
+	// seatDown: function( chair, guest ) {
+	// 	chair.material.color.set(0xed80a4);
+	// 	// console.log(guest.toJSON());
+	// 	this.editor.execute( new SetValueCommand( editor, chair, 'userData', {"guest":guest.toJSON()} ) );
+
+	// },
+
+
+	arrangeSeat: function ( teamId, ticketNumber ) {
 		// console.log(this.editor.selected);
 		var emptyChairList = this.getEmptyChairs(this.editor.selected );
-		console.log("debug",emptyChairList);
 		var i = 0;
 		// add multiple guests to a table
 		if (ticketNumber == 0) {
 			var waitingGuestsList = this.guests.getWaitingGuests(teamId);
-			console.log("debug",waitingGuestsList);
 			for (let i = 0 ; i< waitingGuestsList.length; i+=1) { 
 				var guest = waitingGuestsList[i];
 				
@@ -135,6 +193,7 @@ Tables.prototype = {
 		}
 		else {
 			this.guests.getGuestByTicketNumber(ticketNumber);
+			//TOD change emptychairList to 
 			this.assignSeat(emptyChairList[i], guest, ticketNumber);
 		}
 	},
@@ -149,6 +208,16 @@ Tables.prototype = {
 		}
 		return -1;
 
+	},
+
+	createChair() {
+		var chair_geometry = new THREE.CircleGeometry(1, 32 );
+		var chair_mesh = new THREE.Mesh( chair_geometry,  new THREE.MeshBasicMaterial( { color: 0x83dcfc } ) );
+		chair_mesh.name = "C";
+		var chair_edges = new THREE.EdgesGeometry( chair_geometry );
+		var chair_line = new THREE.LineSegments( chair_edges, new THREE.LineBasicMaterial( { color: 0x000000 } ) );
+		chair_mesh.attach(chair_line);
+		return chair_mesh;
 	},
 
 	createTableSetObject: function ( posX, posY, chairs ) {
@@ -170,12 +239,7 @@ Tables.prototype = {
 			const chair_x = (1.4+table_size) * Math.cos( segment );
 			const chair_y = (1.4+table_size) * Math.sin( segment );
 
-			var chair_geometry = new THREE.CircleGeometry(1, 32 );
-			var chair_edges = new THREE.EdgesGeometry( chair_geometry );
-			var chair_mesh = new THREE.Mesh( chair_geometry, new THREE.MeshBasicMaterial( { color: 0x83dcfc } ) );
-			chair_mesh.name = "C";
-			var chair_line = new THREE.LineSegments( chair_edges, new THREE.LineBasicMaterial( { color: 0x000000 } ) );
-			chair_mesh.attach(chair_line);
+			var chair_mesh = this.createChair();
 			table_mesh.attach(chair_mesh);
 			chair_mesh.position.set( chair_x, chair_y, 0 );
 		}
