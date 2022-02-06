@@ -11,7 +11,7 @@ import { SetColorCommand } from './commands/SetColorCommand.js';
 
 
 
-function SidebarTableGroups( editor, guests ) {
+function SidebarArrangeSummary( editor, guests ) {
 
 	var strings = editor.strings;
 	var signals = editor.signals;
@@ -24,19 +24,19 @@ function SidebarTableGroups( editor, guests ) {
 	// groupContainer.setDisplay( 'none' );
 
 	var headerRow = new UIRow();
-	var headtxt = new UIText( strings.getKey( 'sidebar/event/details' ).toUpperCase() );
+	var headtxt = new UIText( strings.getKey( 'sidebar/arrange/summary' ).toUpperCase() );
 	headerRow.add( headtxt );
 	groupContainer.add( headerRow );
 
 	var unseatedGuestsRow = new UIRow();
 	var unseatedGuests = new UIText();
-	unseatedGuestsRow.add( new UIText( strings.getKey( 'sidebar/groups/unseated' ) ).setWidth( '130px' ) );
+	unseatedGuestsRow.add( new UIText( strings.getKey( 'sidebar/arrange/summary/unseated' ) ).setWidth( '130px' ) );
 	unseatedGuestsRow.add( unseatedGuests );
 	groupContainer.add( unseatedGuestsRow );
 
 	var seatedGuestsRow = new UIRow();
 	var seatedGuests = new UIText();
-	seatedGuestsRow.add( new UIText( strings.getKey( 'sidebar/groups/total' ) ).setWidth( '130px' ) );
+	seatedGuestsRow.add( new UIText( strings.getKey( 'sidebar/arrange/summary/total' ) ).setWidth( '130px' ) );
 	seatedGuestsRow.add( seatedGuests );
 	groupContainer.add( seatedGuestsRow );
 
@@ -44,16 +44,16 @@ function SidebarTableGroups( editor, guests ) {
 
 
 	function updateUI( value ) {
-		if ( value != 0 ) {
-			headtxt.setTextContent(strings.getKey('sidebar/groups/details'));
-			// groupContainer.setDisplay( 'block' );
+		// if ( value != 0 ) {
+		// 	headtxt.setTextContent(strings.getKey('sidebar/groups/details'));
+		// 	// groupContainer.setDisplay( 'block' );
 	
 
-		} else {
+		// } else {
 
-			headtxt.setTextContent(strings.getKey('sidebar/event/details'));
+		// 	headtxt.setTextContent(strings.getKey('sidebar/event/details'));
 
-		}
+		// }
 		var groupDetails = guests.summarizeGroupStatsByTeamId(value);
 		console.log(groupDetails);
 		unseatedGuests.setValue(groupDetails.unseatedGuests);
@@ -72,4 +72,4 @@ function SidebarTableGroups( editor, guests ) {
 
 }
 
-export { SidebarTableGroups };
+export { SidebarArrangeSummary };

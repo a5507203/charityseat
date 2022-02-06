@@ -7,7 +7,6 @@ import { SetUuidCommand } from './commands/SetUuidCommand.js';
 import { SetValueCommand } from './commands/SetValueCommand.js';
 import { SetPositionCommand } from './commands/SetPositionCommand.js';
 import { SetColorCommand } from './commands/SetColorCommand.js';
-import { SidebarTableGroups } from './Sidebar.Table.Groups.js';
 
 
 

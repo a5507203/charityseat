@@ -81,23 +81,23 @@ function Strings( config ) {
 			'menubar/help/manual': 'Manual',
 
 
-			'sidebar/tables/total': 'Total Seat',
-			'sidebar/tables/size': 'Chairs Set of',
-			'sidebar/tables/number': 'Number of Tables',
+			'sidebar/tables/total': 'Total Seats',
+			'sidebar/tables/size': 'Enter Number of Seats in Each Table',
+			'sidebar/tables/number': 'Enter Number of Tables Wanted to Add',
 			'sidebar/event/id': "Event ID",
 			'sidebar/tables/addtitle': 'Create New Table Sets',
 			'sidebar/tables/edit': 'Edit',
-			'sidebar/tables/add': 'Add',
-			'sidebar/tables/confirm': 'Assign the Group to This Table',
+			'sidebar/tables/add': 'Add Table Sets',
+			'sidebar/tables/confirm': 'Assign the Selected Group to This Table',
 			'sidebar/guest/confirm': 'Assign the Guest to This Chair',
 			'sidebar/seat/guest':"Select A Guest",
 			'sidebar/seat/group':"Select A Group",
 			'sidebar/arrange/autoarrange': 'Autoarrange',
 
-			'sidebar/groups/unseated':"Unseated Guests",
-			'sidebar/groups/total':"Total Guests",
-			'sidebar/groups/details':"Arrange Status of the Selected Group",
-			'sidebar/event/details':"Arrange Status of This Event",
+			'sidebar/arrange/summary':"Arrangement Summary",
+			'sidebar/arrange/summary/unseated':"Unseated Guests",
+			'sidebar/arrange/summary/total':"Total Guests",
+		
 
 			'sidebar/animations': 'Animations',
 			'sidebar/animations/play': 'Play',
@@ -110,7 +110,7 @@ function Strings( config ) {
 			'sidebar/scene/fog': 'Fog',
 
 
-			'sidebar/add': 'Edit Table',
+			'sidebar/add': 'Arrangement',
 			'sidebar/properties/object': 'Object',
 			'sidebar/properties/geometry': 'Geometry',
 			'sidebar/properties/material': 'Material',
