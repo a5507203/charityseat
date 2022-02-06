@@ -6,6 +6,8 @@ import { SidebarEditTable } from './Sidebar.Table.js';
 import {Guests} from "./Guests.js";
 import {GenerateEvent} from "./GenerateEvent.js";
 import { SidebarTableGroups } from './Sidebar.Table.Groups.js';
+import { AutoArrange } from './AutoArrange.js';
+
 
 function Arrange( editor ) {
 
@@ -14,7 +16,7 @@ function Arrange( editor ) {
 
 	var generateEvent = new GenerateEvent( editor );
 
-
+	var arrange = new AutoArrange(editor,guests,tables);
 
 	var signals = editor.signals;
 	var strings = editor.strings;
@@ -26,6 +28,14 @@ function Arrange( editor ) {
 	var headerRow = new UIRow();
 	headerRow.add( new UIText( strings.getKey( 'sidebar/tables/addtitle' ).toUpperCase() ) );
 	newTableContainer.add( headerRow );
+
+
+	
+	var totalSeatRow = new UIRow();
+	var totalSeat = new UIText();
+	totalSeatRow.add( new UIText( strings.getKey( 'sidebar/tables/total' ) ).setWidth( '130px' ) );
+	totalSeatRow.add( totalSeat );
+	newTableContainer.add( totalSeatRow );
 
 
 	var tablesRow = new UIRow();
@@ -43,7 +53,12 @@ function Arrange( editor ) {
 
 
 	var buttonRow = new UIRow();
-	var button = new UIButton( strings.getKey( 'sidebar/tables/add' ) ).onClick( function(){ tables.addTableSets(chairs.getValue(), num_tables.getValue()) }).setWidth( '90px' );
+	var button = new UIButton( strings.getKey( 'sidebar/tables/add' ) ).onClick( 
+		function(){ 
+			tables.addTableSets(chairs.getValue(), num_tables.getValue());
+			totalSeat.setInnerHTML(tables.totalSeat);
+		}
+		).setWidth( '90px' );
 	buttonRow.add( button );
 	newTableContainer.add( buttonRow );
 
@@ -62,6 +77,16 @@ function Arrange( editor ) {
 	container.add(new SidebarTableGroups(editor,guests));
 
 	container.add( new SidebarEditTable( editor, tables, guests ) );
+
+
+	var buttonRow = new UIRow();
+	var button = new UIButton( strings.getKey( 'sidebar/arrange/autoarrange' ) ).onClick( 
+		function(){
+			arrange.autoArrange();
+		 }
+		).setWidth( '120px' );
+	buttonRow.add( button );
+	container.add( buttonRow );
 
 	return container;
 

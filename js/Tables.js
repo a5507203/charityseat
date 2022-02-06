@@ -41,6 +41,8 @@ function Tables( editor, guests ) {
 	this.margin = 5;
 	this.distToTable = 1.4;
 	this.guests = guests;
+	this.max_table_size = 0;
+	this.min_table_size = 0;
 	// TODO add event listener to intialize table numbers and list
 	var scope = this;
 	this.signals.objectRemoved.add(function(table){
@@ -88,6 +90,14 @@ Tables.prototype = {
 	addTableSets: function ( chairs, num_tables ) {
 
 		// TODO need to calculate coordinates 
+
+		if (this.max_table_size < chairs){
+			this.max_table_size = chairs;
+		}
+		if (this.min_table_size > chairs) {
+			this.min_table_size = chairs;
+		}
+
 		var y = this.calculateY(chairs);
 		for (let i = 0; i < num_tables; i++) {
 			// var x = -70 + i*15;
@@ -154,7 +164,7 @@ Tables.prototype = {
 	},
 
 	assignSeat: function ( chair, guest, ticketNumber) {
-		console.log("debug",chair);
+		// console.log("debug",chair);
 		if (chair == undefined) {
 			return false;
 		}
@@ -162,7 +172,6 @@ Tables.prototype = {
 		guest.setSeat3d(chair);
 		// // assign a guest to a chair and change the chair status
 		chair.material.color.set(0xed80a4);
-		// console.log(guest.toJSON());
 		this.editor.execute( new SetValueCommand( editor, chair, 'userData', {"guest":guest.toJSON()} ) );
 
 		return true;
@@ -248,7 +257,18 @@ Tables.prototype = {
 
 	},
 
+	tableToList: function (){
+		var tablelist = new Array(this.max_table_size+1);
+		for (let i = 0; i<tablelist.length; i++){
+            tablelist[i] = [];
+        }
 
+		for (const [k,table] of Object.entries(this.table3DDict)){
+			var seatleft = this.getEmptyChairs( table );
+			tablelist[seatleft.length].push(seatleft);
+		};
+		return tablelist;
+	}
 
 };
 

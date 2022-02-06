@@ -81,7 +81,7 @@ function Strings( config ) {
 			'menubar/help/manual': 'Manual',
 
 
-			
+			'sidebar/tables/total': 'Total Seat',
 			'sidebar/tables/size': 'Chairs Set of',
 			'sidebar/tables/number': 'Number of Tables',
 			'sidebar/event/id': "Event ID",
@@ -92,6 +92,7 @@ function Strings( config ) {
 			'sidebar/guest/confirm': 'Assign the Guest to This Chair',
 			'sidebar/seat/guest':"Select A Guest",
 			'sidebar/seat/group':"Select A Group",
+			'sidebar/arrange/autoarrange': 'Autoarrange',
 
 			'sidebar/groups/unseated':"Unseated Guests",
 			'sidebar/groups/total':"Total Guests",

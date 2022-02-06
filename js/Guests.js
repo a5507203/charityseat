@@ -66,6 +66,29 @@ var Guests = function( editor ) {
 
 Guests.prototype = {
 
+    guestToList: function( ){
+        var tempdict = {};   
+        var max_group_size = 0;
+        var min_group_size = 0;
+        for (const [k,guest] of Object.entries(this.guestdict)) {
+            if (!tempdict[guest.teamId]) {
+				tempdict[guest.teamId] = [];
+			}
+            tempdict[guest.teamId].push(guest);
+            var len = tempdict[guest.teamId].length;
+            if (max_group_size < len) max_group_size = len;
+            if (min_group_size > len) min_group_size = len; 
+        }
+        var guestlist = new Array(max_group_size+1);
+        for (let i = 0; i<guestlist.length; i++) {
+            guestlist[i] = [];
+        }
+        for (const [teamId,guests] of Object.entries(tempdict)) {
+            guestlist[guests.length].push(guests);
+        }
+        return guestlist;
+    },
+
     toList: function( ){
         var scope = this;
         var l = [];
