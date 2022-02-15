@@ -274,6 +274,26 @@ function SidebarArrangeTableDetails( editor, tables, guests ) {
 
 	} );
 
+	function parseUserData(table){
+
+		let data = {};  
+		for (const child of table.children){
+			console.log(child);
+			if (child.name == "C") {
+				let cdata = child.userData.guest;
+				if (cdata) {
+					if (!data[cdata.teamId]) {
+						data[cdata.teamId] = [];
+					}
+					data[cdata.teamId].push(cdata.lastName+" "+cdata.firstName);
+				}
+			}
+		}
+		return data;
+	}
+	
+
+
 	function updateUI( object ) {
 
 		// objectType.setValue( object.type );
@@ -282,7 +302,8 @@ function SidebarArrangeTableDetails( editor, tables, guests ) {
 	
 		try {
 			if (object.name == "T"){
-				objectUserData.setValue( JSON.stringify( object.userData, null, '  ' ) );
+				var tdata = parseUserData(object);
+				objectUserData.setValue( JSON.stringify( tdata, null, '  ' ) );
 	
 			}
 			else if (object.name == "C") {
