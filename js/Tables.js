@@ -5,29 +5,7 @@ import { SetValueCommand } from './commands/SetValueCommand.js';
 import { IfcCompositeProfileDef } from '../jsm/loaders/ifc/web-ifc-api.js';
 
 
-// class Chair extends Mesh {
-// 	constructor() {
-// 		var chair_geometry = new THREE.CircleGeometry(1, 32 );
-// 		super( chair_geometry,  new THREE.MeshBasicMaterial( { color: 0x83dcfc } ) );
-// 		this.name = "C";
-// 		var chair_edges = new THREE.EdgesGeometry( chair_geometry );
-// 		var chair_line = new THREE.LineSegments( chair_edges, new THREE.LineBasicMaterial( { color: 0x000000 } ) );
-// 		this.attach(chair_line);
 
-// 	}
-
-	// arrangeSeat() {
-	// 	#ed80a4
-
-	// }
-
-	// seatUp() {
-
-	// }
-
-
-
-// }
 
 function Tables( editor, guests ) {
 

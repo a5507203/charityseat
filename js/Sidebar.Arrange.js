@@ -88,6 +88,31 @@ function Arrange( editor ) {
 		 }
 		).setWidth( '120px' );
 	buttonRow.add( button );
+	
+
+	
+
+	var save = new UIButton( "save" ).onClick( function () {
+
+		var output = editor.scene.toJSON();
+
+		try {
+
+			output = JSON.stringify( output, null, '\t' );
+			output = output.replace( /[\n\t]+([\d\.e\-\[\]]+)/g, '$1' );
+
+		} catch ( e ) {
+
+			output = JSON.stringify( output );
+
+		}
+		var seats = guests.toJSON();
+		console.log(seats);
+		// call api
+		
+
+	} );
+	buttonRow.add( save );
 	container.add( buttonRow );
 
 	return container;

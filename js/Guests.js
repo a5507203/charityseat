@@ -28,15 +28,26 @@ Guest.prototype = {
 
     toJSON: function(){
 
+        // return{
+        //     "firstName": this.firstName,
+        //     "lastName": this.lastName,
+        //     "teamId": this.teamId,
+        //     "teamName": this.teamName,
+        //     "seatNumber": this.seatNumber ,
+        //     "tableNumber": this.tableNumber,
+        //     "ticketNumber": this.ticketNumber
+        // };
+
         return{
-            "firstName": this.firstName,
-            "lastName": this.lastName,
-            "teamId": this.teamId,
-            "teamName": this.teamName,
-            "seatNumber": this.seatNumber ,
-            "tableNumber": this.tableNumber,
-            "ticketNumber": this.ticketNumber
+            "id": this.id,
+            "seat_num": this.seat_num
+            // "teamId": this.teamId,
+            // "teamName": this.teamName,
+            // "seatNumber": this.seatNumber ,
+            // "tableNumber": this.tableNumber,
+            // "ticketNumber": this.ticketNumber
         };
+
 
     },
     
@@ -176,6 +187,14 @@ Guests.prototype = {
             
         }
 		return null;
+    },
+
+    toJSON: function(){
+        var l = [];
+        for (const [k,guest] of Object.entries(this.guestdict)) {
+            l.push(guest.toJSON());
+        }
+        return l;
     }
 
 }
