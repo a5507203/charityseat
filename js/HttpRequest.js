@@ -110,3 +110,5 @@ class HttpRequest {
       return arr.join('&');
     }
   }
+
+  export { HttpRequest };

@@ -16,6 +16,11 @@ function generateUUID() { // Public Domain/MIT
     });
 }
 
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+
 function generateEvent(eventId){
     var jsonData = [];
     var total_guests = 100+Math.floor(Math.random() * 300);
@@ -35,13 +40,14 @@ function generateEvent(eventId){
         var teamId = generateUUID();
         for (let j = 0; j < num_in_team; j++) {
             var guest = {
-                "firstName": String(j),
-                "lastName": String(i),
-                "teamId":teamId,
-                "teamName":"Oli"+String(i),
-                "seatNumber": "NULL",
-                "tableNumber":"NULL",
-                "ticketNumber":generateUUID(),
+                "avatar": "",
+                "first_name": String(j),
+                "last_name": String(i),
+                "group_id":teamId,
+                "group_name":"Oli"+String(i),
+                "name": "NULL",
+                "seat_num":"NULL",
+                "id":getRandomInt(1000000),
         
             }
             jsonData.push(guest);
@@ -53,24 +59,38 @@ function generateEvent(eventId){
     }
 
 
-function SeatConfigAPI(  ) { 
+function SeatConfigAPI( editor ) { 
 
+    this.signals = editor.signals;
+
+    this.signals.rendererCreated.add(function(){
+
+        console.log("rendered");
+    })
 
 
 }
 SeatConfigAPI.prototype = { 
+
+    preprocess: function(){
+
+
+    },
+
     getConfig: function( eventId ){
         var http = new HttpRequest();
+        var scope = this;
         http.init();
-        http.eventsId = 5;
-        http.token ="Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNTE1ZGE0OTQ3YTYwNGQyODg1NWIyZGIyMGQ2ZmE5MzQyOTc3MzQ1MjgyNjgyMTdiMzQxMTQ2NjY2YTY1NTQyYWQ5MDA0NzZlYTI5MDY1YTIiLCJpYXQiOjE2NDM0MjMxNzMuNTgzNjg2LCJuYmYiOjE2NDM0MjMxNzMuNTgzNjg5LCJleHAiOjE2NzQ5NTkxNzMuNTcyMzk0LCJzdWIiOiIyIiwic2NvcGVzIjpbInBsYWNlLWNoYXJpdHkiXX0.CgfB6fFzbFht3WIID72ge4A2vVd8gUhhXrOsy6O7OgleTksJ-PhqX5hsJFfM1y-sxoQ7-G2fbyeAH0GPhmXDPuu7YivlVEGgRXjhs3_ohqbHiOe1pWc_czcS9meaW5dZUziTmdOve_UeFd1LyE5WbMb3l2A91u_Pcgz3SUh-Liy-Q5TnSFFBMW9romAXAnyq06DB2h9Ght8TrMe1xuk6Us6QxaNaTDf0aSsuoiTr8PssWOUQ6mPRqW4gvS0e1u2IVec7U9Qk4y8fEnT5Sym2GiJn3S8EPikA2YSqW7pqmLTruOoL6GalaXki2o4s3cWEKwe0-tYVukvOjyMNrbEDBkjaSTj2S0D1hA7gyJQTO8Wwoj42xAHWb535O_1EK_Tcz0Q3NrXe4He7Ly_YBehsvcv1x7yCF2KEpAaltIeirRymPsB1Tcj1yY13dvuioW8qXuk3mqEANZwQB7ou1lhkQVXcWef_wKQLSrTL9Ji1vCHO_ySPqxcKbocwWDhMG1dl2N-SB9OTedZXb32P4yTDFrvPa9EZNWMCN6RnPFKCrGBhMT6qGuFH46RULQ2KMAOESjb2bxxDEYjLFcYJJ8v2iXyuj9Dv9tyJWBPt2iLDUf3ZnOIsYQziwmkkd7jWJAXpZA9MdQN77_L0cIF9FcNTnRzSvd0UskxPOjyI-07QJKk";
+        http.eventsId = 43;
+        http.token ="Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMGNkNTAxYTM2N2JkZmUxMDg2NTFjZWNmMzJlMWZjOWQ1MTFmNTI5MmQ4NDY1ZjEyOGVhOGRlYjFiOGVlZGIwNmM5YzgwNjdkNTJjMmQzNWYiLCJpYXQiOjE2NDY5NzUwNjcuNzc4ODMxLCJuYmYiOjE2NDY5NzUwNjcuNzc4ODM0LCJleHAiOjE2Nzg1MTEwNjcuNzYwOTgxLCJzdWIiOiIxMiIsInNjb3BlcyI6WyJwbGFjZS1jaGFyaXR5Il19.VPmUco0o-5bCYRC5Xc2TEn3uQ7VPcvezxlm68W_JSD_F4U5uzw4NBbaA_slzwJMUnojm4UtojlEuGJ0FTq2pz5LGawFW1CbHsKRcZ0QVN2Fr2bcmHidUe_isSC0m1Dy5ByyqDqBR0C1ZonZHk4ZX1xyKXjHY9Rm6sI9P-1Ptz7fnrxjcZDRC-OonuOmCSAftyNxIXGmyrnHtZwwVL17E2f3db2mPO9KBQIswDLYztk_evaIz-5Z_gWjphzhkFIzPdeiEMR-bMVLzdhiMaM08x-OTGl4LGsRMZwMOTE1bOaF7maw7VdOEYXiMeMwd7yO8fuJsI77cSxK3P4oovu1W5UszGEmf023AKisRc7_Q-1xxDGHZVYnej81JbvnbwebicltAVwf68jpCfbJmAyDL0pJmWLKCkIf0k8s2mPnu8EDsBPNPBPBm782rHfFNOsI8ObT7DNB1OQVrZoBUGuR8B-95WH8XsQCmY6Wn5qSh9eMKKsKa29dCsUnniy3mtRwpm2tjhel6a4FiBXiX-cmmQPOjC8jAyJamSDhTrwRscK3aogmawye1IYTbqtZ1SboL1YGaVjTYhmcLUZ-hCah4-hChEoMsT19G-HhpInlxDM4w90GgBLhfHdZ4qS5ilJ2U0ePbTLyjRP933_lZYrmqrj-vBEPvWKZs5r76Qv1NLro";
 
               
-        http.get(`https://dev-api.olicharity.org/charity/v1/events/${http.eventsId}/seat-config`)
+        http.get(`https://api.olicharity.org/charity/v1/events/${http.eventsId}/seat-config`)
         // http.get(`/api/v1/events/${http.eventsId}/seat-config`)
             .then((res) => {
             // 座位分配配置数据
             console.log(res);
+            scope.preprocessing();
             })
             .catch((err) => {
             // 错误信息反馈
@@ -84,9 +104,9 @@ SeatConfigAPI.prototype = {
         var http = new HttpRequest();
         http.init();
         http.eventsId = 5;
-        http.token ="Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNTE1ZGE0OTQ3YTYwNGQyODg1NWIyZGIyMGQ2ZmE5MzQyOTc3MzQ1MjgyNjgyMTdiMzQxMTQ2NjY2YTY1NTQyYWQ5MDA0NzZlYTI5MDY1YTIiLCJpYXQiOjE2NDM0MjMxNzMuNTgzNjg2LCJuYmYiOjE2NDM0MjMxNzMuNTgzNjg5LCJleHAiOjE2NzQ5NTkxNzMuNTcyMzk0LCJzdWIiOiIyIiwic2NvcGVzIjpbInBsYWNlLWNoYXJpdHkiXX0.CgfB6fFzbFht3WIID72ge4A2vVd8gUhhXrOsy6O7OgleTksJ-PhqX5hsJFfM1y-sxoQ7-G2fbyeAH0GPhmXDPuu7YivlVEGgRXjhs3_ohqbHiOe1pWc_czcS9meaW5dZUziTmdOve_UeFd1LyE5WbMb3l2A91u_Pcgz3SUh-Liy-Q5TnSFFBMW9romAXAnyq06DB2h9Ght8TrMe1xuk6Us6QxaNaTDf0aSsuoiTr8PssWOUQ6mPRqW4gvS0e1u2IVec7U9Qk4y8fEnT5Sym2GiJn3S8EPikA2YSqW7pqmLTruOoL6GalaXki2o4s3cWEKwe0-tYVukvOjyMNrbEDBkjaSTj2S0D1hA7gyJQTO8Wwoj42xAHWb535O_1EK_Tcz0Q3NrXe4He7Ly_YBehsvcv1x7yCF2KEpAaltIeirRymPsB1Tcj1yY13dvuioW8qXuk3mqEANZwQB7ou1lhkQVXcWef_wKQLSrTL9Ji1vCHO_ySPqxcKbocwWDhMG1dl2N-SB9OTedZXb32P4yTDFrvPa9EZNWMCN6RnPFKCrGBhMT6qGuFH46RULQ2KMAOESjb2bxxDEYjLFcYJJ8v2iXyuj9Dv9tyJWBPt2iLDUf3ZnOIsYQziwmkkd7jWJAXpZA9MdQN77_L0cIF9FcNTnRzSvd0UskxPOjyI-07QJKk";
+        http.token ="Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMGNkNTAxYTM2N2JkZmUxMDg2NTFjZWNmMzJlMWZjOWQ1MTFmNTI5MmQ4NDY1ZjEyOGVhOGRlYjFiOGVlZGIwNmM5YzgwNjdkNTJjMmQzNWYiLCJpYXQiOjE2NDY5NzUwNjcuNzc4ODMxLCJuYmYiOjE2NDY5NzUwNjcuNzc4ODM0LCJleHAiOjE2Nzg1MTEwNjcuNzYwOTgxLCJzdWIiOiIxMiIsInNjb3BlcyI6WyJwbGFjZS1jaGFyaXR5Il19.VPmUco0o-5bCYRC5Xc2TEn3uQ7VPcvezxlm68W_JSD_F4U5uzw4NBbaA_slzwJMUnojm4UtojlEuGJ0FTq2pz5LGawFW1CbHsKRcZ0QVN2Fr2bcmHidUe_isSC0m1Dy5ByyqDqBR0C1ZonZHk4ZX1xyKXjHY9Rm6sI9P-1Ptz7fnrxjcZDRC-OonuOmCSAftyNxIXGmyrnHtZwwVL17E2f3db2mPO9KBQIswDLYztk_evaIz-5Z_gWjphzhkFIzPdeiEMR-bMVLzdhiMaM08x-OTGl4LGsRMZwMOTE1bOaF7maw7VdOEYXiMeMwd7yO8fuJsI77cSxK3P4oovu1W5UszGEmf023AKisRc7_Q-1xxDGHZVYnej81JbvnbwebicltAVwf68jpCfbJmAyDL0pJmWLKCkIf0k8s2mPnu8EDsBPNPBPBm782rHfFNOsI8ObT7DNB1OQVrZoBUGuR8B-95WH8XsQCmY6Wn5qSh9eMKKsKa29dCsUnniy3mtRwpm2tjhel6a4FiBXiX-cmmQPOjC8jAyJamSDhTrwRscK3aogmawye1IYTbqtZ1SboL1YGaVjTYhmcLUZ-hCah4-hChEoMsT19G-HhpInlxDM4w90GgBLhfHdZ4qS5ilJ2U0ePbTLyjRP933_lZYrmqrj-vBEPvWKZs5r76Qv1NLro";
 
-        http.post(`https://dev-api.olicharity.org/charity/v1/events/${http.eventsId}/seat-allocation`, {
+        http.post(`https://api.olicharity.org/charity/v1/events/${http.eventsId}/seat-allocation`, {
             // http.post(`http://yapi.valsn.com/mock/42/charity/v1/events/${http.eventsId}/seat-allocation`, {
             // http.post(`/api/v1/events/${http.eventsId}/seat-allocation`, {
               // 座位配置JSON字符串

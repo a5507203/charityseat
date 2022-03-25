@@ -7,10 +7,12 @@ import {Guests} from "./Guests.js";
 import {GenerateEvent} from "./GenerateEvent.js";
 import { SidebarArrangeSummary } from './Sidebar.Arrange.Summary.js';
 import { AutoArrange } from './AutoArrange.js';
-
+import {SeatConfigAPI} from './SeatConfigAPI.js'
 
 function Arrange( editor ) {
 
+	var seatConfigAPI = new SeatConfigAPI( editor );
+	seatConfigAPI.getConfig(1);
 	var guests = new Guests(editor);
 	var tables = new Tables(editor, guests);
 
